@@ -2,16 +2,14 @@ package com.akbar.dev.movieudacity.view;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,14 +28,7 @@ import com.akbar.dev.movieudacity.api.ApiClient;
 import com.akbar.dev.movieudacity.api.ApiInterface;
 import com.akbar.dev.movieudacity.model.Movie;
 import com.akbar.dev.movieudacity.model.MovieResponse;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,13 +39,12 @@ import retrofit2.Response;
 
 import static com.akbar.dev.movieudacity.utils.Constant.API_KEY;
 
-public class ManActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.my_recycler_view)RecyclerView mRecyclerViewMovie;
     @BindView(R.id.refresh)SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.tv_message_display)TextView mTextViewMessage;
-    @BindView(R.id.slider)SliderLayout mSliderLayout;
     @BindView(R.id.toolbar)Toolbar toolbar;
 
     private String[] category;
@@ -64,17 +54,18 @@ public class ManActivity extends AppCompatActivity implements BaseSliderView.OnS
     private LinearLayoutManager layoutManager;
 
     ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_man);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         category = getResources().getStringArray(R.array.category);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please obtain your API KEY first from themoviedb.org", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.api_warning, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -87,9 +78,9 @@ public class ManActivity extends AppCompatActivity implements BaseSliderView.OnS
 
                 Log.d(TAG, selected);
 
-                if (selected == "Popular"){
+                if (selected.equals(getString(R.string.title_popular))){
                     loadMovieData(0);
-                } else if (selected == "Top Rated"){
+                } else if (selected.equals(getString(R.string.title_top_rated))){
                     loadMovieData(1);
                 }
             }
@@ -102,11 +93,20 @@ public class ManActivity extends AppCompatActivity implements BaseSliderView.OnS
 
         if (position == 0){
             callMovieData(apiService.getPopularMovies(API_KEY));
-            setTitle("Popular Movies");
         }else if (position == 1){
             callMovieData(apiService.getTopRatedMovies(API_KEY));
-            setTitle("Top Rated Movies");
         }
+    }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
     }
 
     private void showAbout() {
@@ -138,7 +138,7 @@ public class ManActivity extends AppCompatActivity implements BaseSliderView.OnS
     }
 
     private void initComponents(){
-        layoutManager = new GridLayoutManager(ManActivity.this, 2);
+        layoutManager = new GridLayoutManager(MainActivity.this, numberOfColumns());
         mRecyclerViewMovie.setHasFixedSize(true);
         mRecyclerViewMovie.setLayoutManager(layoutManager);
         mRecyclerViewMovie.setItemAnimator(new DefaultItemAnimator());
@@ -186,29 +186,7 @@ public class ManActivity extends AppCompatActivity implements BaseSliderView.OnS
     }
 
     @Override
-    public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(this,slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        Log.d("Slider", "Page Changed: " + position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-
-    @Override
     protected void onStop() {
-        mSliderLayout.stopAutoCycle();
         super.onStop();
     }
 

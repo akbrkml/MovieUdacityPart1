@@ -1,18 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_detail_movie"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.akbar.dev.movieudacity.view.DetailMovieActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.akbar.dev.movieudacity.view.DetailMovieActivity"
+    tools:showIn="@layout/activity_detail_movie">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:layout_below="@+id/detail_layout"
+        android:id="@+id/relativeL"
+        android:layout_margin="10dp">
 
+        <ImageView
+            android:id="@+id/img_poster_detail"
+            android:layout_width="120dp"
+            android:layout_height="160dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/backdrop"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_poster_detail"
+            android:padding="5dp"
+            android:layout_marginLeft="40dp"
+            android:id="@+id/year"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TableLayout
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_poster_detail"
+            android:layout_below="@id/year"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:drawable/star_big_on"
+                    android:adjustViewBounds="true"
+                    android:scaleType="center"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rating"
+                    android:textSize="18sp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"/>
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/img_poster_detail"
+            android:id="@+id/list">
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:id="@+id/overview"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

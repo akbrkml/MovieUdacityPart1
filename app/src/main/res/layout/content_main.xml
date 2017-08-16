@@ -5,19 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.akbar.dev.movieudacity.view.ManActivity"
-    tools:showIn="@layout/activity_man">
-
-    <com.daimajia.slider.library.SliderLayout
-        android:id="@+id/slider"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+    tools:context="com.akbar.dev.movieudacity.view.MainActivity"
+    tools:showIn="@layout/activity_main">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/slider"
         android:layout_marginTop="10dp">
 
         <android.support.v7.widget.RecyclerView
